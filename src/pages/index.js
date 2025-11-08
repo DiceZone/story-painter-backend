@@ -161,11 +161,12 @@ export default function HomePage() {
           font-size: 0.9rem;
           color: #7a6b8d;
           background: #f0f5ff;
-          padding: 0.3rem 0.6rem;
+          padding: 0.5rem 0.8rem;
           border-radius: 4px;
-          margin-top: 0.5rem;
+          margin-top: 0.8rem;
           word-break: break-all;
-          display: none;
+          border: 1px solid #e0f0ff;
+          display: block; /* 修改这里：从 none 改为 block */
         }
         
         @media (max-width: 600px) {
@@ -187,11 +188,16 @@ export default function HomePage() {
           .copy-btn {
               align-self: flex-end;
           }
+          
+          .api-full-url {
+              font-size: 0.85rem;
+              padding: 0.4rem 0.6rem;
+          }
         }
       `}</style>
       <div className="container">
         <div className="header">
-          <h1 className="title">story-painter-backend</h1>
+          <h1 className="title">SealDice Log Service</h1>
         </div>
         <p className="description">
           用于对接海豹骰子（SealDice）的自维护日志存储后端服务。
