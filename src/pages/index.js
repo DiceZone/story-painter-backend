@@ -122,6 +122,7 @@ export default function HomePage() {
           display: flex;
           align-items: center;
           gap: 0.5rem;
+          flex-wrap: wrap;
         }
         
         .copy-btn {
@@ -154,7 +155,6 @@ export default function HomePage() {
         .copy-success {
           color: #4caf50;
           font-size: 0.8rem;
-          margin-left: 0.5rem;
           animation: fadeOut 2s ease-in-out forwards;
         }
         
@@ -172,6 +172,10 @@ export default function HomePage() {
           
           .title {
             font-size: 1.4rem;
+          }
+          
+          .domain-hint {
+            font-size: 0.8rem;
           }
         }
       `}</style>
