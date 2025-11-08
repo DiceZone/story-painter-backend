@@ -1,4 +1,7 @@
 export default function HomePage() {
+  // 获取当前域名
+  const currentDomain = typeof window !== 'undefined' ? window.location.origin : '';
+  
   return (
     <>
       <style jsx global>{`
@@ -93,6 +96,13 @@ export default function HomePage() {
           margin-top: 0.5rem;
         }
         
+        .domain-hint {
+          font-size: 0.85rem;
+          color: #8bc2f0;
+          margin-top: 0.3rem;
+          font-style: italic;
+        }
+        
         @media (max-width: 600px) {
           .container {
             padding: 20px;
@@ -118,6 +128,9 @@ export default function HomePage() {
               <span className="api-method">PUT</span>
             </div>
             <p className="api-description">上传日志文件。</p>
+            {currentDomain && (
+              <p className="domain-hint">完整路径: {currentDomain}/api/dice/log</p>
+            )}
           </div>
           <div className="api-card">
             <div>
@@ -125,6 +138,9 @@ export default function HomePage() {
               <span className="api-method">GET</span>
             </div>
             <p className="api-description">根据 Key 和 Password 读取日志数据。</p>
+            {currentDomain && (
+              <p className="domain-hint">完整路径: {currentDomain}/api/dice/load_data</p>
+            )}
           </div>
         </div>
       </div>
