@@ -58,49 +58,12 @@ export default function HomePage() {
           box-shadow: 0 4px 15px rgba(137, 207, 240, 0.2);
           margin-bottom: 20px;
           border: 1px solid #e0f0ff;
-          position: relative;
-        }
-        
-        .github-btn {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          background: #333;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          padding: 8px 16px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          text-decoration: none;
-          font-size: 0.9rem;
-          font-weight: 500;
-          transition: all 0.3s ease;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        .github-btn:hover {
-          background: #555;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-        
-        .github-btn:active {
-          transform: translateY(0);
-        }
-        
-        .github-icon {
-          width: 18px;
-          height: 18px;
-          fill: currentColor;
         }
         
         .header {
           border-bottom: 1px solid #e0f0ff;
           padding-bottom: 1rem;
           margin-bottom: 2rem;
-          padding-right: 120px; /* 为GitHub按钮留出空间 */
         }
         
         .title {
@@ -169,40 +132,20 @@ export default function HomePage() {
           margin-top: 0.5rem;
         }
         
-        .api-url-container {
-          display: flex;
-          align-items: center;
-          gap: 0.8rem;
-          margin-top: 0.8rem;
-        }
-        
-        .api-full-url {
-          font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-          font-size: 0.9rem;
-          color: #7a6b8d;
-          background: #f0f5ff;
-          padding: 0.5rem 0.8rem;
-          border-radius: 4px;
-          word-break: break-all;
-          border: 1px solid #e0f0ff;
-          flex: 1;
-        }
-        
         .copy-btn {
           background: #6fb3e0;
           border: none;
           border-radius: 4px;
           color: white;
           cursor: pointer;
-          padding: 0.5rem 1rem;
-          font-size: 0.85rem;
+          padding: 0.4rem 0.8rem;
+          font-size: 0.8rem;
           display: flex;
           align-items: center;
-          gap: 0.4rem;
+          gap: 0.3rem;
           transition: background-color 0.2s;
           white-space: nowrap;
           flex-shrink: 0;
-          height: fit-content;
         }
         
         .copy-btn:hover {
@@ -213,9 +156,55 @@ export default function HomePage() {
           transform: scale(0.98);
         }
         
-        .copy-icon {
-          width: 14px;
-          height: 14px;
+        .api-full-url {
+          font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+          font-size: 0.9rem;
+          color: #7a6b8d;
+          background: #f0f5ff;
+          padding: 0.5rem 0.8rem;
+          border-radius: 4px;
+          margin-top: 0.8rem;
+          word-break: break-all;
+          border: 1px solid #e0f0ff;
+          display: block; /* 修改这里：从 none 改为 block */
+        }
+        
+        .url-container {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-top: 0.8rem;
+        }
+        
+        .github-btn {
+          background: #333;
+          border: none;
+          border-radius: 4px;
+          color: white;
+          cursor: pointer;
+          padding: 0.4rem 0.8rem;
+          font-size: 0.8rem;
+          display: flex;
+          align-items: center;
+          gap: 0.3rem;
+          transition: background-color 0.2s;
+          white-space: nowrap;
+          flex-shrink: 0;
+          text-decoration: none;
+        }
+        
+        .github-btn:hover {
+          background: #555;
+        }
+        
+        .github-btn:active {
+          transform: scale(0.98);
+        }
+        
+        .footer {
+          display: flex;
+          justify-content: center;
+          margin-top: 1rem;
         }
         
         @media (max-width: 600px) {
@@ -228,110 +217,132 @@ export default function HomePage() {
               font-size: 1.4rem;
           }
           
-          .github-btn {
-            position: relative;
-            top: auto;
-            right: auto;
-            margin: 0 auto 20px auto;
-            align-self: center;
-          }
-          
-          .header {
-            padding-right: 0;
-          }
-          
           .api-path-container {
               flex-direction: column;
               align-items: flex-start;
               gap: 0.5rem;
           }
           
-          .api-url-container {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 0.5rem;
-          }
-          
           .copy-btn {
-            align-self: flex-end;
-            width: fit-content;
+              align-self: flex-end;
           }
           
           .api-full-url {
               font-size: 0.85rem;
               padding: 0.4rem 0.6rem;
           }
+          
+          .url-container {
+              flex-direction: column;
+              align-items: stretch;
+          }
+          
+          .github-btn {
+              align-self: stretch;
+              justify-content: center;
+          }
         }
       `}</style>
-      
       <div className="container">
-        {/* GitHub按钮 */}
-        <a 
-          href="https://github.com/ShiaBox/story-painter-backend" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="github-btn"
-        >
-          <svg className="github-icon" viewBox="0 0 16 16" width="16" height="16">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-          源码
-        </a>
-        
         <div className="header">
-          <h1 className="title">SealDice Log Backend</h1>
-          <p className="description">
-            用于接收并存储海豹核心的跑团日志，接口返回查看链接。
-          </p>
+          <h1 className="title">SealDice Log Service</h1>
         </div>
-        
+        <p className="description">
+          用于对接海豹骰子（SealDice）的自维护日志存储后端服务。
+        </p>
         <div className="api-grid">
           <div className="api-card">
             <div className="api-path-container">
-              <span className="api-path">/api/dice/log</span>
-              <span className="api-method">PUT</span>
-            </div>
-            <p className="api-description">
-              multipart/form-data：name，uniform_id=xxx:数字，file&lt;2MB
-            </p>
-            <div className="api-url-container">
-              <span className="api-full-url">{baseUrl}/api/dice/log</span>
+              <div>
+                <span className="api-path">/api/dice/log</span>
+                <span className="api-method">PUT</span>
+              </div>
               <button 
-                className="copy-btn"
+                className="copy-btn" 
                 onClick={() => copyToClipboard('/api/dice/log')}
+                title="复制完整API链接"
               >
-                <svg className="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" strokeWidth="2"/>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" strokeWidth="2"/>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                 </svg>
                 复制
               </button>
             </div>
+            <p className="api-description">上传日志文件。</p>
+            {baseUrl && (
+              <div className="url-container">
+                <div className="api-full-url">
+                  {baseUrl}/api/dice/log
+                </div>
+                <a 
+                  href="https://github.com/ShiaBox/story-painter-backend" 
+                  className="github-btn" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  title="查看源码"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                  源码
+                </a>
+              </div>
+            )}
           </div>
-          
           <div className="api-card">
             <div className="api-path-container">
-              <span className="api-path">/api/dice/load_data</span>
-              <span className="api-method">GET</span>
-            </div>
-            <p className="api-description">
-              参数：key=AbCd&amp;password=123456<br/>
-              成功返回示例：{"{"}"url":"https://your-frontend.example.com/?key=AbCd#123456"{"}"}
-            </p>
-            <div className="api-url-container">
-              <span className="api-full-url">{baseUrl}/api/dice/load_data?key=AbCd&amp;password=123456</span>
+              <div>
+                <span className="api-path">/api/dice/load_data</span>
+                <span className="api-method">GET</span>
+              </div>
               <button 
-                className="copy-btn"
-                onClick={() => copyToClipboard('/api/dice/load_data?key=AbCd&password=123456')}
+                className="copy-btn" 
+                onClick={() => copyToClipboard('/api/dice/load_data')}
+                title="复制完整API链接"
               >
-                <svg className="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" strokeWidth="2"/>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" strokeWidth="2"/>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                 </svg>
                 复制
               </button>
             </div>
+            <p className="api-description">根据 Key 和 Password 读取日志数据。</p>
+            {baseUrl && (
+              <div className="url-container">
+                <div className="api-full-url">
+                  {baseUrl}/api/dice/load_data
+                </div>
+                <a 
+                  href="https://github.com/ShiaBox/story-painter-backend" 
+                  className="github-btn" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  title="查看源码"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                  源码
+                </a>
+              </div>
+            )}
           </div>
+        </div>
+        <div className="footer">
+          <a 
+            href="https://github.com/ShiaBox/story-painter-backend" 
+            className="github-btn" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            title="查看源码"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            GitHub 源码
+          </a>
         </div>
       </div>
     </>
