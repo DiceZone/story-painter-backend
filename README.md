@@ -35,11 +35,11 @@
 - 进入 `项目设置` - `域名管理` ，点击 `添加自定义域名` 并按照提示为域名绑定 CNAME
 
 ### 部署前端
-- Fork [前端项目](https://log-api.shia.loli.band/api/dice/log) 
+- Fork [前端项目](https://github.com/sealdice/story-painter) 
 - 在 EdgeOne Pages 里创建前端项目
 - 将你 Fork 的前端项目的 `src/store.ts` 文件中的 `https://weizaima.com/dice/api/load_data` 修改为 `https://your-backend.example.com/api/dice/load_data`
 - 进入 `项目设置` - `域名管理` ，点击 `添加自定义域名` 并按照提示为域名绑定 CNAME
 - 等待 EdgeOne Pages 自动构建完成
 
 ## 项目参考
-[海豹骰日志后端 - Worker版](https://github.com/sealdice/story-painter) 
+[海豹骰日志后端 - Worker版](https://github.com/sealdice/story-painter-cfbackend) 
