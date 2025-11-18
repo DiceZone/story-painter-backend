@@ -164,5 +164,5 @@ export async function onRequest({ request, env }) {
   }
 
   // --- Fallback: Not Found ---
-  return new Response('Not Found', { status: 404 });
+  return new Response('404 Not Found 检查API设置是否正确', { status: 404 });
 }
