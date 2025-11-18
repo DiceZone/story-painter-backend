@@ -23,7 +23,7 @@ function generateStorageData(data, name) {
 
 function normalize(url) {
   if (typeof url !== 'string' || !url) {
-    throw new Error('FRONTEND_URL is not configured. Please set runtime variable FRONTEND_URL.');
+    throw new Error('未配置前端地址参数 FRONTEND_URL ，请设置运行时的变量 FRONTEND_URL。FRONTEND_URL is not configured. Please set runtime variable FRONTEND_URL.');
   }
   const withProtocol = /^https?:\/\//i.test(url) ? url : `https://${url}`;
   return withProtocol.replace(/\/+$/, '/');
@@ -36,7 +36,7 @@ async function resolveFrontendUrl(env) {
   if (runtimeVar) return normalize(runtimeVar);
   if (env && env.FRONTEND_URL) return normalize(env.FRONTEND_URL);
   if (typeof CFG_URL !== 'undefined' && CFG_URL) return normalize(CFG_URL);
-  throw new Error('FRONTEND_URL is not configured. Please set runtime variable FRONTEND_URL or edit config/appConfig.js to export FRONTEND_URL.');
+  throw new Error('未配置前端地址参数FRONTEND_URL，请设置运行时的变量或编辑 config/appConfig.js 添加用于导出前端地址的参数 FRONTEND_URL。FRONTEND_URL is not configured. Please set runtime variable FRONTEND_URL or edit config/appConfig.js to export FRONTEND_URL.');
 }
 const FILE_SIZE_LIMIT_MB = 2;
 
@@ -58,7 +58,7 @@ export async function onRequest({ request, env }) {
   try {
     FRONTEND_URL = await resolveFrontendUrl(env);
   } catch (e) {
-    const msg = (e && e.message) ? e.message : 'FRONTEND_URL is not configured. Please set runtime variable FRONTEND_URL or edit config/appConfig.js.';
+    const msg = (e && e.message) ? e.message : '未配置前端地址参数FRONTEND_URL，请设置运行时的变量或编辑 config/appConfig.js 添加用于导出前端地址的参数FRONTEND_URL。FRONTEND_URL is not configured. Please set runtime variable FRONTEND_URL or edit config/appConfig.js.';
     return new Response(msg, { status: 500 });
   }
   // Handle CORS preflight requests
@@ -68,7 +68,7 @@ export async function onRequest({ request, env }) {
 
   // Check for KV binding in the global scope
   if (typeof XBSKV === 'undefined') {
-    return new Response('CRITICAL ERROR: Global KV Binding "XBSKV" not found. Please verify EdgeOne Pages configuration.', { status: 500 });
+    return new Response('严重错误：API服务找不到全局KV绑定"XBSKV"。请向日志站维护者反馈修正 EdgeOne Pages 配置。CRITICAL ERROR: Global KV Binding "XBSKV" not found. Please verify EdgeOne Pages configuration.', { status: 500 });
   }
 
   // --- Route 1: Upload Log ---
@@ -159,7 +159,7 @@ export async function onRequest({ request, env }) {
 
     } catch (error) {
       console.error('Load data error:', error);
-      return new Response(error.stack || 'Internal Server Error', { status: 500 });
+      return new Response(error.stack || '服务器错误 Internal Server Error', { status: 500 });
     }
   }
 
