@@ -74,6 +74,30 @@ export default function HomePage() {
           font-weight: 600;
         }
         
+        .version-badge {
+          display: inline-flex;
+          align-items: center;
+          white-space: nowrap;
+          position: relative;
+          box-sizing: border-box;
+          cursor: default;
+          flex-wrap: nowrap;
+          padding: 4px 10px;
+          border-radius: 8px;
+          color: #00c180;
+          background-color: rgba(99, 226, 183, 0.15);
+          transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          line-height: 1;
+          height: 28px;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+        }
+        
+        .version-badge:hover {
+          background-color: rgba(99, 226, 183, 0.25);
+        }
+        
         .description {
           font-size: 0.95rem;
           margin-bottom: 24px;
@@ -181,7 +205,7 @@ export default function HomePage() {
           background: #333;
           color: white;
           text-decoration: none;
-          padding: 0.6rem 1.2rem;
+          padding: 0.3rem 0.7rem;
           border-radius: 6px;
           font-size: 0.9rem;
           transition: background-color 0.2s;
@@ -244,6 +268,9 @@ export default function HomePage() {
       <div className="container">
         <div className="header">
           <h1 className="title">SealDice Log Service</h1>
+          <div style={{ textAlign: 'center' }}>
+            <span className="version-badge">v20251119-beta0437</span>
+          </div>
         </div>
         <p className="description">
           用于对接海豹骰子（SealDice）的自维护日志存储后端服务。
