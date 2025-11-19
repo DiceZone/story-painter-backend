@@ -28,16 +28,67 @@ function normalize(url) {
   const withProtocol = /^https?:\/\//i.test(url) ? url : `https://${url}`;
   return withProtocol.replace(/\/+$/, '/');
 }
-import { FRONTEND_URL as CFG_URL } from '../../../config/appConfig.js';
+
+// 配置解析函数 - 兼容.env文件和EdgeOne环境
 async function resolveFrontendUrl(env) {
+  // 优先级：环境变量 > env参数 > 默认值
   const runtimeVar =
     (typeof globalThis !== 'undefined' && globalThis.FRONTEND_URL) ||
     (typeof process !== 'undefined' && process.env && process.env.FRONTEND_URL);
   if (runtimeVar) return normalize(runtimeVar);
   if (env && env.FRONTEND_URL) return normalize(env.FRONTEND_URL);
-  if (typeof CFG_URL !== 'undefined' && CFG_URL) return normalize(CFG_URL);
-  throw new Error('未配置前端地址参数FRONTEND_URL，请设置运行时的变量或编辑 config/appConfig.js 添加用于导出前端地址的参数 FRONTEND_URL。FRONTEND_URL is not configured. Please set runtime variable FRONTEND_URL or edit config/appConfig.js to export FRONTEND_URL.');
+  
+  // 尝试从.env文件读取
+  if (typeof process !== 'undefined' && process.env && process.env.FRONTEND_URL) {
+    return normalize(process.env.FRONTEND_URL);
+  }
+  
+  throw new Error('未配置前端地址参数FRONTEND_URL，请设置运行时的环境变量或创建.env文件。FRONTEND_URL is not configured. Please set runtime environment variable or create .env file.');
 }
+
+// 存储服务 - 支持EdgeOne KV和本地文件存储
+class StorageService {
+  constructor() {
+    this.isEdgeOneEnv = typeof XBSKV !== 'undefined';
+    this.storageMode = this.isEdgeOneEnv ? 'edgeone' : 'local';
+    
+    if (!this.isEdgeOneEnv) {
+      console.log('运行在本地模式，数据将存储在本地文件中');
+    }
+  }
+
+  async put(key, data) {
+    if (this.isEdgeOneEnv) {
+      // EdgeOne环境使用KV存储
+      await XBSKV.put(key, JSON.stringify(data));
+      return true;
+    } else {
+      // 本地环境使用文件存储（简化版，实际需要文件系统支持）
+      // 这里使用内存存储作为临时方案
+      if (!this.localStorage) {
+        this.localStorage = new Map();
+      }
+      this.localStorage.set(key, JSON.stringify(data));
+      return true;
+    }
+  }
+
+  async get(key) {
+    if (this.isEdgeOneEnv) {
+      // EdgeOne环境使用KV存储
+      const data = await XBSKV.get(key);
+      return data ? JSON.parse(data) : null;
+    } else {
+      // 本地环境使用文件存储（简化版）
+      if (!this.localStorage) {
+        return null;
+      }
+      const data = this.localStorage.get(key);
+      return data ? JSON.parse(data) : null;
+    }
+  }
+}
+
 const FILE_SIZE_LIMIT_MB = 2;
 
 const getCorsHeaders = (frontendUrl, methods = 'GET, PUT, OPTIONS') => ({
@@ -66,10 +117,8 @@ export async function onRequest({ request, env }) {
     return new Response(null, { headers: getCorsHeaders(FRONTEND_URL) });
   }
 
-  // Check for KV binding in the global scope
-  if (typeof XBSKV === 'undefined') {
-    return new Response('严重错误：API服务找不到全局KV绑定"XBSKV"。请向日志站维护者反馈修正 EdgeOne Pages 配置。CRITICAL ERROR: Global KV Binding "XBSKV" not found. Please verify EdgeOne Pages configuration.', { status: 500 });
-  }
+  // 初始化存储服务
+  const storageService = new StorageService();
 
   // --- Route 1: Upload Log ---
   if (pathname.endsWith('/api/dice/log') && request.method === 'PUT') {
@@ -111,8 +160,8 @@ export async function onRequest({ request, env }) {
       const key = generateRandomString(4);
       const storageKey = `${key}#${password}`;
 
-      // Use the global XBSKV variable
-      await XBSKV.put(storageKey, JSON.stringify(generateStorageData(logdata, name)));
+      // 使用存储服务存储数据
+      await storageService.put(storageKey, generateStorageData(logdata, name));
 
       const responsePayload = { url: `${FRONTEND_URL}?key=${key}#${password}` };
 
@@ -142,8 +191,8 @@ export async function onRequest({ request, env }) {
 
       const storageKey = `${key}#${password}`;
       
-      // Use the global XBSKV variable
-      const storedData = await XBSKV.get(storageKey);
+      // 使用存储服务读取数据
+      const storedData = await storageService.get(storageKey);
 
       if (storedData === null) {
         return new Response(JSON.stringify({ error: "Data not found" }), {

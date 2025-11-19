@@ -1,45 +1,114 @@
 # SealDice Log Backend
 
-[![Node](https://img.shields.io/badge/node-%3E=18-green)](https://nodejs.org/)
-[![Next.js](https://img.shields.io/badge/next-14.x-black)](https://nextjs.org/)
-[![EdgeOne](https://img.shields.io/badge/EdgeOne-Pages-blue)](https://console.cloud.tencent.com/edgeone/pages)
+支持双模式运行的后端服务：
+- **EdgeOne Pages 模式**：使用腾讯云EdgeOne Pages和KV存储
+- **本地服务器模式**：使用本地JSON文件存储
 
-用于接收并存储海豹核心的跑团日志，接口返回查看链接。
+## 项目结构
 
-## 接口
-- PUT /api/dice/log（multipart/form-data：name，uniform_id=xxx:数字，file<2MB）
-- GET /api/dice/load_data?key=AbCd&password=123456
-- 成功返回示例：{"url":"https://your-frontend.example.com/?key=AbCd#123456"}
+```
+story-painter-backend/
+├── functions/                 # EdgeOne Pages Functions
+│   └── api/dice/
+│       └── [...slug].js       # EdgeOne API处理函数
+├── pages/                     # Next.js页面和API路由
+│   ├── api/dice/             # 本地服务器API路由
+│   │   ├── log.js            # 上传日志API
+│   │   └── load_data.js      # 读取数据API
+│   └── index.js              # 主页
+├── lib/                      # 工具库
+│   ├── config.js             # 配置管理
+│   └── storage.js            # 存储服务抽象层
+├── .env.example              # 环境变量示例
+├── next.config.js           # Next.js配置
+└── package.json             # 项目依赖
+```
 
-## 配置（必填，二选一）
-优先级：部署时设置环境变量 FRONTEND_URL > 文件 config/appConfig.js  
-两者都未提供时：接口返回 500 并提示配置。
+## 配置说明
 
-- 部署时变量（推荐）
-  FRONTEND_URL=https://your-frontend.example.com/
-- 或：编辑文件 config/appConfig.js
-  export const FRONTEND_URL = 'https://your-frontend.example.com/';
+### 环境变量配置
 
-## 部署到EdgeOne Pages
-### 部署后端
-- Fork 本项目
-- 在 EdgeOne Pages 控制台点击 `创建项目` ，选择导入 `Git 仓库` 
-- 绑定你的 GitHub 账户，选择你刚刚 Fork 的本项目
-- 以下操作二选一：
-	- 在 `环境变量` 中添加环境变量：变量名 `FRONTEND_URL` 变量值 `https://your-frontend.example.com/`
-	- 修改文件 config/appConfig.js，将 `FRONTEND_URL` 的值修改为 `https://your-frontend.example.com/`
-- 慎重选择 `加速区域` ，如果你的域名未备案，请选择 `全球可用区（不含中国大陆）`
-- 点击 `开始部署` 按钮
-- 新建一个 KV 存储的命名空间，绑定到你刚刚创建的项目，变量名称设置为 `XBSKV`
-- 重新构建项目
-- 进入 `项目设置` - `域名管理` ，点击 `添加自定义域名` 并按照提示为域名绑定 CNAME
+配置优先级：**环境变量 > .env文件 > 默认值**
 
-### 部署前端
-- Fork [前端项目](https://github.com/sealdice/story-painter) 
-- 在 EdgeOne Pages 里创建前端项目
-- 将你 Fork 的前端项目的 `src/store.ts` 文件中的 `https://weizaima.com/dice/api/load_data` 修改为 `https://your-backend.example.com/api/dice/load_data`
-- 进入 `项目设置` - `域名管理` ，点击 `添加自定义域名` 并按照提示为域名绑定 CNAME
-- 等待 EdgeOne Pages 自动构建完成
+创建 `.env` 文件（参考 `.env.example`）：
 
-## 项目参考
-[海豹骰日志后端 - Worker版](https://github.com/sealdice/story-painter-cfbackend) 
+```env
+# 前端地址配置
+FRONTEND_URL=https://your-domain.com/
+
+# 存储模式配置 (edgeone 或 local)
+STORAGE_MODE=edgeone
+
+# 本地存储目录 (仅当STORAGE_MODE=local时生效)
+LOCAL_STORAGE_DIR=./data
+```
+
+### 运行模式
+
+#### 1. EdgeOne Pages 模式 (默认)
+- 使用腾讯云EdgeOne KV存储
+- 适合生产环境部署
+- 配置：`STORAGE_MODE=edgeone`
+
+#### 2. 本地服务器模式
+- 使用本地JSON文件存储
+- 适合开发和测试
+- 配置：`STORAGE_MODE=local`
+
+## 部署方式
+
+### EdgeOne Pages 部署
+
+1. 在腾讯云EdgeOne Pages中创建项目
+2. 配置环境变量：
+   - `FRONTEND_URL`: 你的域名
+   - `STORAGE_MODE`: `edgeone`
+3. 绑定KV存储到 `XBSKV`
+4. 部署项目
+
+### 本地服务器运行
+
+#### 方式一：使用提供的脚本
+```bash
+# 开发模式
+npm run dev:local
+
+# 生产模式
+npm run start:local
+```
+
+#### 方式二：手动设置环境变量
+```bash
+# 开发模式
+FRONTEND_URL=http://localhost:3000 STORAGE_MODE=local npm run dev
+
+# 生产模式
+FRONTEND_URL=http://localhost:3000 STORAGE_MODE=local npm run start
+```
+
+## API接口
+
+### 上传日志
+- **路径**: `/api/dice/log`
+- **方法**: `PUT`
+- **参数**: `name`, `file`, `uniform_id`
+- **返回**: 包含访问URL的JSON
+
+### 读取数据
+- **路径**: `/api/dice/load_data`
+- **方法**: `GET`
+- **参数**: `key`, `password`
+- **返回**: 存储的日志数据
+
+## 注意事项
+
+1. **文件大小限制**: 单个文件最大2MB
+2. **CORS配置**: 自动根据FRONTEND_URL配置跨域
+3. **数据存储**: 
+   - EdgeOne模式：数据存储在EdgeOne KV中
+   - 本地模式：数据存储在 `./data` 目录下的JSON文件中
+4. **环境变量**: 确保在生产环境正确设置环境变量
+
+## 开发说明
+
+项目同时支持两种运行模式，确保API接口在两种环境下行为一致。存储层通过抽象设计，自动根据环境选择适当的存储方式。
