@@ -38,7 +38,7 @@ async function resolveFrontendUrl(env) {
   if (typeof CFG_URL !== 'undefined' && CFG_URL) return normalize(CFG_URL);
   throw new Error('未配置前端地址参数FRONTEND_URL，请设置运行时的变量或编辑 config/appConfig.js 添加用于导出前端地址的参数 FRONTEND_URL。FRONTEND_URL is not configured. Please set runtime variable FRONTEND_URL or edit config/appConfig.js to export FRONTEND_URL.');
 }
-const FILE_SIZE_LIMIT_MB = 2;
+const FILE_SIZE_LIMIT_MB = 5;
 
 const getCorsHeaders = (frontendUrl, methods = 'GET, PUT, OPTIONS') => ({
   'Access-Control-Allow-Origin': frontendUrl.slice(0, -1),
