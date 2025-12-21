@@ -7,7 +7,7 @@
 用于接收并存储海豹核心的跑团日志，接口返回查看链接。
 
 ## 接口
-- PUT /api/dice/log（multipart/form-data：name，uniform_id=xxx:数字，file<2MB）
+- PUT /api/dice/log（multipart/form-data：name，uniform_id=xxx:数字，file<5MB）
 - GET /api/dice/load_data?key=AbCd&password=123456
 - 成功返回示例：{"url":"https://your-frontend.example.com/?key=AbCd#123456"}
 
